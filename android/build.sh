@@ -26,9 +26,10 @@ create_directory_if_not_found() {
 	fi
 }
 
+USER_WEBRTC_URL="https://github.com/notedit/webrtc-mirror.git"
 DEFAULT_WEBRTC_URL="https://chromium.googlesource.com/external/webrtc"
 DEPOT_TOOLS="$PROJECT_ROOT/depot_tools"
-WEBRTC_ROOT="$PROJECT_ROOT/webrtc"
+WEBRTC_ROOT="$PROJECT_ROOT/../webrtc"
 create_directory_if_not_found "$WEBRTC_ROOT"
 BUILD="$WEBRTC_ROOT/libjingle_peerconnection_builds"
 WEBRTC_TARGET="AppRTCDemo"
