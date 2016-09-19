@@ -29,7 +29,7 @@ create_directory_if_not_found() {
 USER_WEBRTC_URL="https://github.com/notedit/webrtc-mirror.git"
 DEFAULT_WEBRTC_URL="https://chromium.googlesource.com/external/webrtc"
 DEPOT_TOOLS="$PROJECT_ROOT/depot_tools"
-WEBRTC_ROOT="$PROJECT_ROOT/../webrtc"
+WEBRTC_ROOT="$PROJECT_ROOT/webrtc"
 create_directory_if_not_found "$WEBRTC_ROOT"
 BUILD="$WEBRTC_ROOT/libjingle_peerconnection_builds"
 WEBRTC_TARGET="AppRTCDemo"
@@ -172,13 +172,13 @@ prepare_gyp_defines() {
         if [ "$WEBRTC_ARCH" = "x86" ] ;
         then
             wrX86
-        elif [ "$WEBRTC_ARCH" = "x86_64" ] ;
+        elif [ "$WEBRTC_ARCH" = "x64" ] ;
         then
             wrX86_64
-        elif [ "$WEBRTC_ARCH" = "armv7" ] ;
+        elif [ "$WEBRTC_ARCH" = "arm" ] ;
         then
             wrarmv7
-        elif [ "$WEBRTC_ARCH" = "armv8" ] ;
+        elif [ "$WEBRTC_ARCH" = "arm64" ] ;
         then
             wrarmv8
         fi
@@ -202,18 +202,22 @@ execute_build() {
     then
         ARCH="x86"
         STRIP="$ANDROID_TOOLCHAINS/x86-4.9/prebuilt/linux-x86_64/bin/i686-linux-android-strip"
-    elif [ "$WEBRTC_ARCH" = "x86_64" ] ;
+        gn gen out_android_x86/Release --args='target_os="android" target_cpu="x86"'
+    elif [ "$WEBRTC_ARCH" = "x64" ] ;
     then
-        ARCH="x86_64"
+        ARCH="x64"
         STRIP="$ANDROID_TOOLCHAINS/x86_64-4.9/prebuilt/linux-x86_64/bin/x86_64-linux-android-strip"
-    elif [ "$WEBRTC_ARCH" = "armv7" ] ;
+        gn gen out_android_x86_64/Release --args='target_os="android" target_cpu="x64"'
+    elif [ "$WEBRTC_ARCH" = "arm" ] ;
     then
-        ARCH="armeabi-v7a"
+        ARCH="arm"
         STRIP="$ANDROID_TOOLCHAINS/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/arm-linux-androideabi-strip"
-    elif [ "$WEBRTC_ARCH" = "armv8" ] ;
+        gn gen out_android_armeabi-v7a/Release --args='target_os="android" target_cpu="arm"'
+    elif [ "$WEBRTC_ARCH" = "arm64" ] ;
     then
-        ARCH="arm64-v8a"
+        ARCH="arm64"
         STRIP="$ANDROID_TOOLCHAINS/aarch64-linux-android-4.9/prebuilt/linux-x86_64/bin/aarch64-linux-android-strip"
+        gn gen out_android_arm64-v8a/Release --args='target_os="android" target_cpu="arm64"'
     fi
 
     if [ "$WEBRTC_DEBUG" = "true" ] ;
@@ -242,14 +246,14 @@ execute_build() {
         create_directory_if_not_found "$ARCH_JNI"
 
         # Copy the jar
-        cp -p "$SOURCE_DIR/gen/libjingle_peerconnection_java/libjingle_peerconnection_java.jar" "$TARGET_DIR/libs/libjingle_peerconnection.jar" 
+        cp -p "$SOURCE_DIR/lib.java/webrtc/api/libjingle_peerconnection_java.jar" "$TARGET_DIR/libs/libjingle_peerconnection.jar" 
 
         # Strip the build only if its release
         if [ "$WEBRTC_DEBUG" = "true" ] ;
         then
             cp -p "$WEBRTC_ROOT/src/$ARCH_OUT/$BUILD_TYPE/lib/libjingle_peerconnection_so.so" "$ARCH_JNI/libjingle_peerconnection_so.so"
         else
-            "$STRIP" -o "$ARCH_JNI/libjingle_peerconnection_so.so" "$WEBRTC_ROOT/src/$ARCH_OUT/$BUILD_TYPE/lib/libjingle_peerconnection_so.so" -s    
+            "$STRIP" -o "$ARCH_JNI/libjingle_peerconnection_so.so" "$WEBRTC_ROOT/src/$ARCH_OUT/$BUILD_TYPE/libjingle_peerconnection_so.so" -s    
         fi
 
         cd "$TARGET_DIR"
@@ -262,7 +266,7 @@ execute_build() {
     else
         
         echo "$BUILD_TYPE build for apprtc failed for revision $REVISION_NUM"
-        exit 1
+        #exit 1
     fi
 }
 
