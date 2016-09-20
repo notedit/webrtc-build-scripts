@@ -15,7 +15,7 @@ while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symli
 done
 PROJECT_DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
-USER_WEBRTC_URL="https://github.com/notedit/webrtc-mirror.git"
+USER_WEBRTC_URL="https://github.com/notedit/dotEngine-webrtc-mirror.git"
 DEFAULT_WEBRTC_URL="https://chromium.googlesource.com/external/webrtc"
 DEFAULT_POD_URL="https://s3.amazonaws.com/libjingle"
 WEBRTC="$PROJECT_DIR/webrtc"
@@ -217,6 +217,9 @@ function update2Revision() {
         twiddle_objc_target
     fi
     echo "-- webrtc has been successfully updated"
+
+    # need to checkout to the ios revision
+
 }
 
 # This function cleans out your webrtc directory and does a fresh clone -- slower than a pull
