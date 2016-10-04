@@ -26,7 +26,7 @@ create_directory_if_not_found() {
 	fi
 }
 
-USER_WEBRTC_URL="https://github.com/notedit/dotEngine-webrtc-mirror.git"
+USER_WEBRTC_URL="git@github.com:notedit/dotEngine-webrtc-mirror.git"
 DEFAULT_WEBRTC_URL="https://chromium.googlesource.com/external/webrtc"
 DEPOT_TOOLS="$PROJECT_ROOT/depot_tools"
 WEBRTC_ROOT="$PROJECT_ROOT/webrtc"
@@ -246,14 +246,16 @@ execute_build() {
         create_directory_if_not_found "$ARCH_JNI"
 
         # Copy the jar
-        cp -p "$SOURCE_DIR/lib.java/webrtc/api/libjingle_peerconnection_java.jar" "$TARGET_DIR/libs/libjingle_peerconnection.jar" 
+        cp -p "$SOURCE_DIR/lib.java/webrtc/api/libjingle_peerconnection_java.jar" "$TARGET_DIR/libs/libjingle_peerconnection.jar"
+        cp -p "$SOURCE_DIR/lib.java/webrtc/base/base_java.jar" "$TARGET_DIR/libs/base_java.jar"
 
         # Strip the build only if its release
         if [ "$WEBRTC_DEBUG" = "true" ] ;
         then
             cp -p "$WEBRTC_ROOT/src/$ARCH_OUT/$BUILD_TYPE/lib/libjingle_peerconnection_so.so" "$ARCH_JNI/libjingle_peerconnection_so.so"
         else
-            "$STRIP" -o "$ARCH_JNI/libjingle_peerconnection_so.so" "$WEBRTC_ROOT/src/$ARCH_OUT/$BUILD_TYPE/libjingle_peerconnection_so.so" -s    
+            #"$STRIP" -o "$ARCH_JNI/libjingle_peerconnection_so.so" "$WEBRTC_ROOT/src/$ARCH_OUT/$BUILD_TYPE/libjingle_peerconnection_so.so" -s    
+            cp -p "$WEBRTC_ROOT/src/$ARCH_OUT/$BUILD_TYPE/"*.so "$ARCH_JNI/"
         fi
 
         cd "$TARGET_DIR"
