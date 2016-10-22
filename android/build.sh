@@ -36,6 +36,14 @@ WEBRTC_TARGET="AppRTCDemo"
 
 ANDROID_TOOLCHAINS="$WEBRTC_ROOT/src/third_party/android_tools/ndk/toolchains"
 
+
+
+WEBRTC_JAR="$WEBRTC_ROOT/src/webrtc/api/android/java/src/org/webrtc"
+
+WEBRTC_JAR_VOICE_ENGINE="$WEBRTC_ROOT/src/webrtc/modules/audio_device/android/java/src/org/webrtc/voiceengine"
+
+
+
 exec_ninja() {
   echo "Running ninja"
   ninja -C $1 
@@ -175,6 +183,9 @@ execute_build() {
         # Copy the jar
         cp -p "$SOURCE_DIR/lib.java/webrtc/api/libjingle_peerconnection_java.jar" "$TARGET_DIR/libs/libjingle_peerconnection.jar"
         cp -p "$SOURCE_DIR/lib.java/webrtc/base/base_java.jar" "$TARGET_DIR/libs/base_java.jar"
+
+        cp -rf $WEBRTC_JAR  "$TARGET_DIR/libs/"
+        cp -rf $WEBRTC_JAR_VOICE_ENGINE "$TARGET_DIR/libs/"
 
         cp -p "$WEBRTC_ROOT/src/$ARCH_OUT/$BUILD_TYPE/"*.so "$ARCH_JNI/"
 
