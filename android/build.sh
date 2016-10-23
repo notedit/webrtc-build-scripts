@@ -32,7 +32,7 @@ DEPOT_TOOLS="$PROJECT_ROOT/depot_tools"
 WEBRTC_ROOT="$PROJECT_ROOT/webrtc"
 create_directory_if_not_found "$WEBRTC_ROOT"
 BUILD="$WEBRTC_ROOT/libjingle_peerconnection_builds"
-WEBRTC_TARGET="AppRTCDemo"
+WEBRTC_TARGET="libjingle_peerconnection_so"
 
 ANDROID_TOOLCHAINS="$WEBRTC_ROOT/src/third_party/android_tools/ndk/toolchains"
 
@@ -46,7 +46,7 @@ WEBRTC_JAR_VOICE_ENGINE="$WEBRTC_ROOT/src/webrtc/modules/audio_device/android/ja
 
 exec_ninja() {
   echo "Running ninja"
-  ninja -C $1 
+  ninja -C $1  $WEBRTC_TARGET 
 }
 
 # Installs the required dependencies on the machine
@@ -144,16 +144,16 @@ execute_build() {
 
     if [ "$WEBRTC_ARCH" = "x86" ] ;
     then
-        gn gen out_android_x86/Release --args='target_os="android" target_cpu="x86"'
+        gn gen out_android_x86/Release --args='target_os="android" target_cpu="x86" is_debug=false  rtc_include_tests=false'
     elif [ "$WEBRTC_ARCH" = "x64" ] ;
     then
-        gn gen out_android_x64/Release --args='target_os="android" target_cpu="x64"'
+        gn gen out_android_x64/Release --args='target_os="android" target_cpu="x64" is_debug=false  rtc_include_tests=false'
     elif [ "$WEBRTC_ARCH" = "arm" ] ;
     then
-        gn gen out_android_arm/Release --args='target_os="android" target_cpu="arm"'
+        gn gen out_android_arm/Release --args='target_os="android" target_cpu="arm" is_debug=false  rtc_include_tests=false'
     elif [ "$WEBRTC_ARCH" = "arm64" ] ;
     then
-        gn gen out_android_arm64/Release --args='target_os="android" target_cpu="arm64"'
+        gn gen out_android_arm64/Release --args='target_os="android" target_cpu="arm64" is_debug=false  rtc_include_tests=false'
     fi
 
     if [ "$WEBRTC_DEBUG" = "true" ] ;
@@ -181,8 +181,8 @@ execute_build() {
         create_directory_if_not_found "$ARCH_JNI"
 
         # Copy the jar
-        cp -p "$SOURCE_DIR/lib.java/webrtc/api/libjingle_peerconnection_java.jar" "$TARGET_DIR/libs/libjingle_peerconnection.jar"
-        cp -p "$SOURCE_DIR/lib.java/webrtc/base/base_java.jar" "$TARGET_DIR/libs/base_java.jar"
+        #cp -p "$SOURCE_DIR/lib.java/webrtc/api/libjingle_peerconnection_java.jar" "$TARGET_DIR/libs/libjingle_peerconnection.jar"
+        #cp -p "$SOURCE_DIR/lib.java/webrtc/base/base_java.jar" "$TARGET_DIR/libs/base_java.jar"
 
         cp -rf $WEBRTC_JAR  "$TARGET_DIR/libs/"
         cp -rf $WEBRTC_JAR_VOICE_ENGINE "$TARGET_DIR/libs/"
