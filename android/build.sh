@@ -34,6 +34,8 @@ create_directory_if_not_found "$WEBRTC_ROOT"
 BUILD="$WEBRTC_ROOT/libjingle_peerconnection_builds"
 WEBRTC_TARGET="libjingle_peerconnection_so"
 
+WEBRTC_TARGET_JAR="libjingle_peerconnection_java"
+
 ANDROID_TOOLCHAINS="$WEBRTC_ROOT/src/third_party/android_tools/ndk/toolchains"
 
 
@@ -46,7 +48,8 @@ WEBRTC_JAR_VOICE_ENGINE="$WEBRTC_ROOT/src/webrtc/modules/audio_device/android/ja
 
 exec_ninja() {
   echo "Running ninja"
-  ninja -C $1  $WEBRTC_TARGET 
+  ninja -C $1  $WEBRTC_TARGET
+  ninja -C $1  $WEBRTC_TARGET_JAR
 }
 
 # Installs the required dependencies on the machine
