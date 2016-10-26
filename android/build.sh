@@ -147,16 +147,16 @@ execute_build() {
 
     if [ "$WEBRTC_ARCH" = "x86" ] ;
     then
-        gn gen out_android_x86/Release --args='target_os="android" target_cpu="x86" is_debug=false  rtc_include_tests=false'
+        gn gen out_android_x86/Release --args='target_os="android" target_cpu="x86" is_debug=false  is_component_build=false'
     elif [ "$WEBRTC_ARCH" = "x64" ] ;
     then
-        gn gen out_android_x64/Release --args='target_os="android" target_cpu="x64" is_debug=false  rtc_include_tests=false'
+        gn gen out_android_x64/Release --args='target_os="android" target_cpu="x64" is_debug=false  is_component_build=false'
     elif [ "$WEBRTC_ARCH" = "arm" ] ;
     then
-        gn gen out_android_arm/Release --args='target_os="android" target_cpu="arm" is_debug=false  rtc_include_tests=false'
+        gn gen out_android_arm/Release --args='target_os="android" target_cpu="arm" dcheck_always_on=true symbol_level=1 is_debug=false  is_component_build=false'
     elif [ "$WEBRTC_ARCH" = "arm64" ] ;
     then
-        gn gen out_android_arm64/Release --args='target_os="android" target_cpu="arm64" is_debug=false  rtc_include_tests=false'
+        gn gen out_android_arm64/Release --args='target_os="android" target_cpu="arm64" is_debug=false  is_component_build=false'
     fi
 
     if [ "$WEBRTC_DEBUG" = "true" ] ;
