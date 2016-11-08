@@ -42,6 +42,8 @@ ANDROID_TOOLCHAINS="$WEBRTC_ROOT/src/third_party/android_tools/ndk/toolchains"
 
 WEBRTC_JAR="$WEBRTC_ROOT/src/webrtc/api/android/java/src/org/webrtc"
 
+WEBRTC_JAR_BASE="$WEBRTC_ROOT/src/webrtc/base/java/src/org/webrtc/"*.java
+
 WEBRTC_JAR_VOICE_ENGINE="$WEBRTC_ROOT/src/webrtc/modules/audio_device/android/java/src/org/webrtc/voiceengine"
 
 
@@ -187,8 +189,10 @@ execute_build() {
         #cp -p "$SOURCE_DIR/lib.java/webrtc/api/libjingle_peerconnection_java.jar" "$TARGET_DIR/libs/libjingle_peerconnection.jar"
         #cp -p "$SOURCE_DIR/lib.java/webrtc/base/base_java.jar" "$TARGET_DIR/libs/base_java.jar"
 
-        cp -rf $WEBRTC_JAR  "$TARGET_DIR/libs/"
-        cp -rf $WEBRTC_JAR_VOICE_ENGINE "$TARGET_DIR/libs/"
+        mkdir -p "$TARGET_DIR/libs/org/"
+        cp -rf $WEBRTC_JAR  "$TARGET_DIR/libs/org/"
+        cp -rf $WEBRTC_JAR_BASE  "$TARGET_DIR/libs/org/webrtc/"
+        cp -rf $WEBRTC_JAR_VOICE_ENGINE "$TARGET_DIR/libs/org/webrtc/"
 
         cp -p "$WEBRTC_ROOT/src/$ARCH_OUT/$BUILD_TYPE/"*.so "$ARCH_JNI/"
 
